@@ -1,4 +1,3 @@
-#include <Gosu/Gosu.hpp>
 #include <cmath>
 
 class Star{
