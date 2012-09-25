@@ -1,3 +1,4 @@
 libgosu.a
 main.o
+lib/star.o
 my_game
