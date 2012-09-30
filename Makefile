@@ -1,4 +1,4 @@
-OBJS = main.o lib/star.o
+OBJS = main.o lib/star.o lib/galaxy.o
 CXXFLAGS += `gosu-config --cxxflags `
 LIBS = `gosu-config --libs `
 

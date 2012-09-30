@@ -1,5 +1,5 @@
 #include <Gosu/Gosu.hpp>
-#include "lib/star.cpp"
+#include "lib/galaxy.cpp"
 // #include <iostream>
 
 int WINDOW_X = 1000;
@@ -7,18 +7,16 @@ int WINDOW_Y = 1000;
 int GALAXY_SIZE = 1000;
 int GALAXY_STARS_COUNT = 200;
 float GALAXY_GRAVITY_CONSTANT = 0.00001;
-float GALAXY_JOINING_DISTANCE = 2;
-float GALAXY_FORCE_CHANGE_DISTANCE = 4;
 
 class GameWindow : public Gosu::Window
 {
-  Star first;
+  Galaxy* galaxy;
 
   public:
   
   GameWindow() : Window(WINDOW_X, WINDOW_Y, false)
   {
-    first = Star(100, 100, 1000);
+    galaxy = new Galaxy(GALAXY_SIZE, GALAXY_STARS_COUNT, GALAXY_GRAVITY_CONSTANT);
     setCaption(L"Gosu Tutorial Game");
   }
 
@@ -28,7 +26,7 @@ class GameWindow : public Gosu::Window
 
   void draw()
   {
-    first.draw(graphics());
+    galaxy->draw(graphics());
   }
 };
 

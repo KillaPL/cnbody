@@ -1,4 +1,5 @@
 libgosu.a
 main.o
 lib/star.o
+lib/galaxy.o
 my_game

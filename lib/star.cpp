@@ -1,6 +1,5 @@
-#include <cmath>
 #include <Gosu/Gosu.hpp>
-
+#include <cmath>
 
 class Star{
   public:
@@ -45,7 +44,7 @@ class Star{
     ay = 0;
   }
 
-  void draw(Gosu::Graphics graphics){
+  void draw(Gosu::Graphics &graphics){
     graphics.drawQuad(
       x,        y,        0xffffffff, 
       x + size, y,        0xffffffff, 
