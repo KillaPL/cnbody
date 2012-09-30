@@ -1,5 +1,6 @@
 #include <Gosu/Gosu.hpp>
 #include <cmath>
+#include <iostream>
 
 class Star{
   public:
@@ -17,7 +18,7 @@ class Star{
     x = _x;
     y = _y;
     mass = _mass;
-    size = log(_mass*0.01 + 2.2);
+    size = 10 + log(_mass + 2.2);
     vx = 0;
     vy = 0;
     ax = 0;
@@ -31,8 +32,10 @@ class Star{
   }
 
   void update_acceleration(float force_x, float force_y){
-    ax += force_x / mass;
-    ay += force_y / mass;
+    ax += 1.0 * force_x / mass;
+    ay += 1.0 * force_y / mass;
+
+    // std::cout << ax << "  " << ay << "\n";
   }
 
   void move(){
