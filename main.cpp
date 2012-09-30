@@ -28,17 +28,7 @@ class GameWindow : public Gosu::Window
 
   void draw()
   {
-    draw_star();
-  }
-
-  void draw_star(){
-    graphics().drawQuad(
-      first.x,              first.y,              0xffffffff, 
-      first.x + first.size, first.y,              0xffffffff, 
-      first.x + first.size, first.y + first.size, 0xffffffff, 
-      first.x,              first.y + first.size, 0xffffffff, 
-      0
-    );
+    first.draw(graphics());
   }
 };
 
