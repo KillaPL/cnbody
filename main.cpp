@@ -2,32 +2,33 @@
 #include "lib/galaxy.cpp"
 // #include <iostream>
 
-int SIZE = 1000;
-int GALAXY_SIZE = 10000;
-int GALAXY_STARS_COUNT = 10000;
-float GALAXY_GRAVITY_CONSTANT = 0.0001;
-
 class GameWindow : public Gosu::Window
 {
-  Galaxy* galaxy; 
+  Galaxy* galaxy;
+  // int counter;
 
   public:
   
-  GameWindow() : Window(SIZE, SIZE, false)
+  GameWindow() : Window(1000, 1000, false)
   {
-    galaxy = new Galaxy(GALAXY_SIZE, GALAXY_STARS_COUNT, GALAXY_GRAVITY_CONSTANT);
+    // counter = 0;
+    galaxy = new Galaxy(3000);
     setCaption(L"Gosu Tutorial Game"); 
   }
 
   void update()
   {
     galaxy->calculate_forces();
-    galaxy->move(); 
+    galaxy->move();
+    // counter++;
+    // if(counter == 20){
+    //   exit(1);
+    // }
   }
 
   void draw()
   {
-    graphics().pushTransform(Gosu::scale(1.0 * SIZE / GALAXY_SIZE));
+    graphics().pushTransform(Gosu::scale(0.1));
     galaxy->draw(graphics());
     graphics().popTransform();
   }
