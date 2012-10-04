@@ -1,28 +1,23 @@
 #include <Gosu/Gosu.hpp>
 #include <cmath>
 #include <iostream>
+#include "vector.cpp"
 
 class Star{
   public:
 
-  int x;
-  int y;
+  Vector position;
+  Vector velocity;
+  Vector acceleration;
   int mass;
   int size;
-  float vx;
-  float vy;
-  float ax;
-  float ay;
   
   Star(int _x, int _y, int _mass){
-    x = _x;
-    y = _y;
+    position = Vector(_x, _y);
+    velocity = Vector(0.0, 0.0);
+    acceleration = Vector(0.0, 0.0);
     mass = _mass;
-    size = 10 + log(_mass + 2.2);
-    vx = 0;
-    vy = 0;
-    ax = 0;
-    ay = 0;
+    size = log(_mass + 2.2);
   }
 
   Star(){
@@ -31,28 +26,30 @@ class Star{
   ~Star(){
   }
 
-  void update_acceleration(float force_x, float force_y){
-    ax += 1.0 * force_x / mass;
-    ay += 1.0 * force_y / mass;
+  float distance_to(Star *star){
+    return (this->position - star->position).normal_sum();
+  }
 
-    // std::cout << ax << "  " << ay << "\n";
+  void update_acceleration(Vector force){
+    acceleration += force / mass;
+  }
+
+  void update_acceleration(float fx, float fy){
+    acceleration += Vector(fx, fy) / mass;
   }
 
   void move(){
-    vx += ax;
-    vy += ay;
-    x  += vx;
-    y  += vy;
-    ax = 0;
-    ay = 0;
+    velocity += acceleration;
+    position += velocity;
+    acceleration.reset();
   }
 
   void draw(Gosu::Graphics &graphics){
     graphics.drawQuad(
-      x,        y,        0xffffffff, 
-      x + size, y,        0xffffffff, 
-      x + size, y + size, 0xffffffff, 
-      x,        y + size, 0xffffffff, 
+      position.a,        position.b,        0xffffffff, 
+      position.a + size, position.b,        0xffffffff, 
+      position.a + size, position.b + size, 0xffffffff, 
+      position.a,        position.b + size, 0xffffffff, 
       0
     );
   }

@@ -12,7 +12,7 @@ class GameWindow : public Gosu::Window
   GameWindow() : Window(1000, 1000, false)
   {
     // counter = 0;
-    galaxy = new Galaxy(3000);
+    galaxy = new Galaxy(3500);
     setCaption(L"Gosu Tutorial Game"); 
   }
 
@@ -28,7 +28,8 @@ class GameWindow : public Gosu::Window
 
   void draw()
   {
-    graphics().pushTransform(Gosu::scale(0.1));
+    graphics().pushTransform(Gosu::scale(0.2));
+    graphics().pushTransform(Gosu::translate(2000, 2000));
     galaxy->draw(graphics());
     graphics().popTransform();
   }

@@ -1,8 +1,10 @@
 #include <Gosu/Gosu.hpp>
 #include <cmath>
 #include "star.cpp"
-// #include <iostream>
+// #include "vector.cpp"
+#include <iostream>
 // #include <omp.h>
+#include <time.h>
 
 class Galaxy{
   public:
@@ -11,14 +13,15 @@ class Galaxy{
   int stars_count;
   float gravity_constant;
   Star **stars;
-
   float **a_x_matrix;
   float **a_y_matrix;
 
   Galaxy(int _stars_count){
     stars_count = _stars_count;
-    size = 10000;
+    size = 1000;
     gravity_constant = 0.00001;
+
+    srand(time(NULL));
 
     stars = new Star*[stars_count];
 
@@ -115,19 +118,20 @@ class Galaxy{
     Star *star_1 = stars[i];
     Star *star_2 = stars[j];
 
-    float distance = distance_between(star_1, star_2);
+    float distance = star_1->distance_to(star_2);
 
     if(distance > star_1->size + star_2->size){
       float force = force_between(star_1, star_2, distance);
-      float force_x = force * (star_1->x - star_2->x);
-      float force_y = force * (star_1->y - star_2->y);
+      float force_x = force * (star_1->position.a - star_2->position.a);
+      float force_y = force * (star_1->position.b - star_2->position.b);
+      // std::cout << force_x << "  " << force_y << "\n";
       add_to_matrix(i, j, force_x, force_y);
     }
   }
 
-  float distance_between(Star *star_1, Star *star_2){
-    return sqrt((star_1->x - star_2->x)*(star_1->x - star_2->x) + (star_1->y - star_2->y)*(star_1->y - star_2->y));
-  }
+  // float distance_between(Star *star_1, Star *star_2){
+  //   return sqrt((star_1->x - star_2->x)*(star_1->x - star_2->x) + (star_1->y - star_2->y)*(star_1->y - star_2->y));
+  // }
 
   float force_between(Star *star_1, Star *star_2, float distance){
     return gravity_constant * star_1->mass * star_2->mass / (distance * distance);
