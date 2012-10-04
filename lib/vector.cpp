@@ -17,29 +17,23 @@ class Vector{
   ~Vector(){
   }
 
-  Vector operator-(){
-    return Vector(-this->a, -this->b);
-  }
-
-  Vector operator+(Vector other){
-    return Vector(this->a + other.a, this->b + other.b);
-  }
-
   void operator+=(Vector other){
     this->a += other.a;
     this->b += other.b;
   }
 
+  void operator*=(float number){
+    this->a *= number;
+    this->b *= number;
+  }
+
+  void operator/=(float number){
+    this->a /= number;
+    this->b /= number;
+  }
+
   Vector operator-(Vector other){
     return Vector(this->a - other.a, this->b - other.b);
-  }
-
-  Vector operator*(float number){
-    return Vector(this->a * number, this->b * number);
-  }
-
-  Vector operator/(float number){
-    return Vector(this->a / number, this->b / number);
   }
 
   void reset(){

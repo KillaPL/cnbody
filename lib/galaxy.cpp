@@ -85,7 +85,7 @@ class Galaxy{
         y_force += a_y_matrix[i][j];
       }
 
-      stars[i]->update_acceleration(x_force, y_force);
+      stars[i]->update_acceleration(Vector(x_force, y_force));
     }
   }
 

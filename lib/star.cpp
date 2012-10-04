@@ -31,11 +31,8 @@ class Star{
   }
 
   void update_acceleration(Vector force){
-    acceleration += force / mass;
-  }
-
-  void update_acceleration(float fx, float fy){
-    acceleration += Vector(fx, fy) / mass;
+    force /= mass;
+    acceleration += force;
   }
 
   void move(){
