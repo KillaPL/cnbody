@@ -57,10 +57,11 @@ class Galaxy{
   void init_matrices(){
     force_matrix = new Vector*[stars_count];
 
-    #pragma omp parallel for num_threads(200)
+    #pragma omp parallel for num_threads(50)
     for(int i = 0; i < stars_count; ++i){
       force_matrix[i] = new Vector[stars_count];
 
+      #pragma omp parallel for num_threads(50)
       for(int j = 0; j < stars_count; ++j){
         force_matrix[i][j] = Vector(0, 0);
       }
@@ -68,9 +69,9 @@ class Galaxy{
   }
 
   void update_matrices(){
-    #pragma omp parallel for num_threads(200) //shared(a_x_matrix, a_y_matrix)
+    #pragma omp parallel for num_threads(50) //shared(a_x_matrix, a_y_matrix)
     for(int i = 0; i < stars_count; ++i){
-      #pragma omp parallel for num_threads(200)
+      #pragma omp parallel for num_threads(50)
       for(int j = i+1; j < stars_count; ++j){
         update_forces_with_matrices(i, j);
       }
@@ -78,7 +79,7 @@ class Galaxy{
   }
 
   void update_forces(){
-    #pragma omp parallel for num_threads(200)
+    #pragma omp parallel for num_threads(50)
     for(int i = 0; i < stars_count; ++i){
       Vector force = Vector(0.0, 0.0);
 
@@ -91,7 +92,7 @@ class Galaxy{
   }
 
   void remove_matrices(){
-    #pragma omp parallel for num_threads(200)
+    #pragma omp parallel for num_threads(50)
     for(int i = 0; i < stars_count; ++i){
       delete[] force_matrix[i];
     }
@@ -112,14 +113,16 @@ class Galaxy{
   }
 
   void update_forces_with_matrices(int i, int j){
-    Star *star_1 = stars[i];
-    Star *star_2 = stars[j];
+    if(i != j){
+      Star *star_1 = stars[i];
+      Star *star_2 = stars[j];
 
-    float distance = star_1->distance_to(star_2);
+      float distance = star_1->distance_to(star_2);
 
-    if(distance > star_1->size + star_2->size){
-      Vector force = force_between(star_1, star_2, distance);
-      add_to_matrix(i, j, force);
+      if(distance > star_1->size + star_2->size){
+        Vector force = force_between(star_1, star_2, distance);
+        add_to_matrix(i, j, force);
+      }
     }
   }
 
@@ -130,7 +133,6 @@ class Galaxy{
   }
 
   void move(){
-    #pragma omp parallel for
     for(int i = 0; i < stars_count; i++){
       stars[i]->move();
     }
