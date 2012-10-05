@@ -19,14 +19,24 @@ class Galaxy{
   Galaxy(int _stars_count){
     stars_count = _stars_count;
     size = 1000;
-    gravity_constant = 0.00001;
+    gravity_constant = 0.0001;
 
     srand(time(NULL));
 
     stars = new Star*[stars_count];
 
     for(int i = 0; i < stars_count; i++){
-      stars[i] = new Star(1.0 * size * rand() / RAND_MAX, 1.0 * size * rand() / RAND_MAX, exp(15.0 * rand() / RAND_MAX));
+      float random_x = 1.0 * size * rand() / RAND_MAX;
+      float random_y = 1.0 * size * rand() / RAND_MAX;
+      float random_mass = 10000 * sqrt(-2 * log(1.0 * rand() / RAND_MAX)) * sin(3.1415926 * rand() / RAND_MAX);
+
+      if(random_mass < 0){
+        random_mass *= -1;
+      }
+
+      std::cout << random_mass << "\n";
+
+      stars[i] = new Star(random_x, random_y, random_mass);
     }
 
     std::cout << "Initialised galaxy with " << stars_count << " stars\n";
@@ -124,14 +134,9 @@ class Galaxy{
       float force = force_between(star_1, star_2, distance);
       float force_x = force * (star_1->position.a - star_2->position.a);
       float force_y = force * (star_1->position.b - star_2->position.b);
-      // std::cout << force_x << "  " << force_y << "\n";
       add_to_matrix(i, j, force_x, force_y);
     }
   }
-
-  // float distance_between(Star *star_1, Star *star_2){
-  //   return sqrt((star_1->x - star_2->x)*(star_1->x - star_2->x) + (star_1->y - star_2->y)*(star_1->y - star_2->y));
-  // }
 
   float force_between(Star *star_1, Star *star_2, float distance){
     return gravity_constant * star_1->mass * star_2->mass / (distance * distance);
