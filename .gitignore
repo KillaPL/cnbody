@@ -3,3 +3,5 @@ main.o
 lib/star.o
 lib/galaxy.o
 my_game
+gmon.out
+gprof.output

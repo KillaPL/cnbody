@@ -5,25 +5,25 @@
 class GameWindow : public Gosu::Window
 {
   Galaxy* galaxy;
-  // int counter;
+  int counter;
 
   public:
   
   GameWindow() : Window(1000, 1000, false)
   {
-    // counter = 0;
-    galaxy = new Galaxy(3500);
-    setCaption(L"Gosu Tutorial Game"); 
+    counter = 0;
+    galaxy = new Galaxy(500);
+    // setCaption(L"Gosu Tutorial Game"); 
   }
 
   void update()
   {
     galaxy->calculate_forces();
     galaxy->move();
-    // counter++;
-    // if(counter == 20){
-    //   exit(1);
-    // }
+    counter++;
+    if(counter == 20){
+      exit(1);
+    }
   }
 
   void draw()
@@ -35,7 +35,7 @@ class GameWindow : public Gosu::Window
   }
 };
 
-int main() 
+global int main() 
 {
   GameWindow window;
   window.show(); 

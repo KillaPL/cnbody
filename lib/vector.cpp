@@ -22,6 +22,11 @@ class Vector{
     this->b += other.b;
   }
 
+  void operator-=(Vector other){
+    this->a -= other.a;
+    this->b -= other.b;
+  }
+
   void operator*=(float number){
     this->a *= number;
     this->b *= number;
