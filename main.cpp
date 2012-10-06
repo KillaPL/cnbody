@@ -14,7 +14,7 @@ class GameWindow : public Gosu::Window
   {
     // counter = 0;
     // mili = Gosu::milliseconds();
-    galaxy = new Galaxy(7000);
+    galaxy = new Galaxy();
     setCaption(L"Gosu Tutorial Game"); 
   }
 
