@@ -13,7 +13,7 @@ class Galaxy{
 
   Galaxy(){
     stars_count = 5000;
-    gravity_constant = 0.00001;
+    gravity_constant = 0.0003;
     
     int size = 1000;
 
@@ -22,16 +22,35 @@ class Galaxy{
 
     stars = new Star*[stars_count];
 
-    for(int i = 0; i < stars_count; i++){
-      float random_x = 1.0 * size * rand() / RAND_MAX;
-      float random_y = 1.0 * size * rand() / RAND_MAX;
-      float random_mass = 10000 * sqrt(-2 * log(1.0 * rand() / RAND_MAX)) * sin(3.1415926 * rand() / RAND_MAX);
+    float var = 0.2;
+    float mass_param = 10000;
+
+    for(int i = 0; i < stars_count/2; i++){
+      float random_x = var * size * rand() / RAND_MAX;
+      float random_y = var * size * rand() / RAND_MAX;
+      float random_z = var * size * rand() / RAND_MAX;
+      // float random_z = 0;
+      float random_mass = mass_param * sqrt(-2 * log(1.0 * rand() / RAND_MAX)) * sin(3.1415926 * rand() / RAND_MAX);
 
       if(random_mass < 0){
         random_mass *= -1;
       }
 
-      stars[i] = new Star(random_x, random_y, random_mass);
+      stars[i] = new Star(random_x, random_y, random_z, 20, 0, 0, random_mass);
+    }
+
+    for(int i = stars_count/2; i < stars_count; i++){
+      float random_x = (1 - var) * size + var * size * rand() / RAND_MAX;
+      float random_y = (1 - var) * size + var * size * rand() / RAND_MAX;
+      float random_z = (1 - var) * size + var * size * rand() / RAND_MAX;
+      // float random_z = 0;
+      float random_mass = mass_param * sqrt(-2 * log(1.0 * rand() / RAND_MAX)) * sin(3.1415926 * rand() / RAND_MAX);
+
+      if(random_mass < 0){
+        random_mass *= -1;
+      }
+
+      stars[i] = new Star(random_x, random_y, random_z, -20, 0, 0, random_mass);
     }
 
     std::cout << "Initialised galaxy with " << stars_count << " stars\n";
@@ -49,7 +68,7 @@ class Galaxy{
   void update_forces(const EngineBrute &calculations){
     #pragma omp parallel for num_threads(50)
     for(int i = 0; i < stars_count; ++i){
-      Vector force = Vector(0, 0);
+      Vector force = Vector(0, 0, 0);
 
       for(int j = 0; j < i; ++j){
         force += calculations.force_matrix[i][j];

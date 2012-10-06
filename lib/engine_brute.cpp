@@ -42,11 +42,11 @@ class EngineBrute{
 
         float distance = star_1.squared_distance_to(star_2);
 
-        if(distance > sqr(star_1.size + star_2.size)){
+        if(4 * distance > sqr(star_1.size + star_2.size)){
           force_matrix[i][j] = force_between(star_1, star_2, distance, gravity_constant);
         }
         else{
-          force_matrix[i][j] = Vector(0, 0);
+          force_matrix[i][j] = Vector(0, 0, 0);
         }
       }
     }
