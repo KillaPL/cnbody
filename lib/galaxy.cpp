@@ -13,7 +13,7 @@ class Galaxy{
 
   Galaxy(){
     stars_count = 5000;
-    gravity_constant = 0.0003;
+    gravity_constant = 0.0001;
     
     int size = 1000;
 

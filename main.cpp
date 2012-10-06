@@ -31,8 +31,8 @@ class GameWindow : public Gosu::Window
 
   void draw()
   {
+    graphics().pushTransform(Gosu::translate(400, 400));
     graphics().pushTransform(Gosu::scale(0.2));
-    graphics().pushTransform(Gosu::translate(2000, 2000));
     galaxy->draw(graphics());
     graphics().popTransform();
   }
