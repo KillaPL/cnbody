@@ -1,4 +1,5 @@
 #include <cmath>
+#include "helpers.cpp"
 
 class Vector{
   public:
@@ -6,7 +7,7 @@ class Vector{
   float a;
   float b;
 
-  Vector(float _a, float _b){
+  Vector(const float _a, const float _b){
     this->a = _a;
     this->b = _b;
   }
@@ -17,27 +18,32 @@ class Vector{
   ~Vector(){
   }
 
-  void operator+=(Vector other){
+  Vector operator=(const Vector &other){
+    this->a = other.a;
+    this->b = other.b;
+  }
+
+  void operator+=(const Vector &other){
     this->a += other.a;
     this->b += other.b;
   }
 
-  void operator-=(Vector other){
+  void operator-=(const Vector &other){
     this->a -= other.a;
     this->b -= other.b;
   }
 
-  void operator*=(float number){
+  void operator*=(const float number){
     this->a *= number;
     this->b *= number;
   }
 
-  void operator/=(float number){
+  void operator/=(const float number){
     this->a /= number;
     this->b /= number;
   }
 
-  Vector operator-(Vector other){
+  Vector operator-(const Vector &other){
     return Vector(this->a - other.a, this->b - other.b);
   }
 
@@ -46,7 +52,7 @@ class Vector{
     this->b = 0.0;
   }
 
-  float normal_sum(){
-    return sqrt(this->a*this->a + this->b*this->b);
+  float square_sum(){
+    return sqr(this->a) + sqr(this->b);
   }
 };

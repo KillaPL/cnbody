@@ -12,7 +12,7 @@ class Star{
   int mass;
   int size;
   
-  Star(int _x, int _y, int _mass){
+  Star(const int _x, const int _y, const int _mass){
     position = Vector(_x, _y);
     velocity = Vector(0.0, 0.0);
     acceleration = Vector(0.0, 0.0);
@@ -26,11 +26,11 @@ class Star{
   ~Star(){
   }
 
-  inline float distance_to(Star *star){
-    return (this->position - star->position).normal_sum();
+  float squared_distance_to(const Star &star){
+    return (this->position - star.position).square_sum();
   }
 
-  void update_acceleration(Vector force){
+  void update_acceleration(Vector &force){
     force /= mass;
     acceleration += force;
   }

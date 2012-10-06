@@ -12,7 +12,6 @@
 class Galaxy{
   public:
 
-  int size;
   int stars_count;
   float gravity_constant;
   Star **stars;
@@ -20,11 +19,12 @@ class Galaxy{
 
   Galaxy(int _stars_count){
     stars_count = _stars_count;
-    size = 1000;
     gravity_constant = 0.0001;
+    
+    int size = 1000;
 
-    // srand(time(NULL));
-    srand(0);
+    srand(time(NULL));
+    // srand(0);
 
     stars = new Star*[stars_count];
 
@@ -56,12 +56,11 @@ class Galaxy{
   }
 
   void init_matrices(){
-    force_matrix = new Vector*[stars_count];
+    force_matrix = new Vector*[stars_count*stars_count];
 
     #pragma omp parallel for num_threads(50)
     for(int i = 0; i < stars_count; ++i){
       force_matrix[i] = new Vector[stars_count];
-      force_matrix[i][i] = Vector(0, 0);
     }
   }
 
@@ -70,7 +69,17 @@ class Galaxy{
     for(int i = 0; i < stars_count; ++i){
       #pragma omp parallel for num_threads(50)
       for(int j = 0; j < i; ++j){
-        update_forces_with_matrices(i, j);
+        Star &star_1 = *stars[i];
+        Star &star_2 = *stars[j];
+
+        float distance = star_1.squared_distance_to(star_2);
+
+        if(distance > sqr(star_1.size + star_2.size)){
+          force_matrix[i][j] = force_between(star_1, star_2, distance);
+        }
+        else{
+          force_matrix[i][j] = Vector(0, 0);
+        }
       }
     }
   }
@@ -78,7 +87,7 @@ class Galaxy{
   void update_forces(){
     #pragma omp parallel for num_threads(50)
     for(int i = 0; i < stars_count; ++i){
-      Vector force = Vector(0.0, 0.0);
+      Vector force = Vector(0, 0);
 
       for(int j = 0; j < i; ++j){
         force += force_matrix[i][j];
@@ -108,23 +117,10 @@ class Galaxy{
     remove_matrices();
   }
 
-  void update_forces_with_matrices(int i, int j){
-    Star *star_1 = stars[i];
-    Star *star_2 = stars[j];
 
-    float distance = star_1->distance_to(star_2);
-
-    if(distance > star_1->size + star_2->size){
-      force_matrix[i][j] = force_between(star_1, star_2, distance);
-    }
-    else{
-      force_matrix[i][j] = Vector(0, 0);
-    }
-  }
-
-  Vector force_between(Star *star_1, Star *star_2, float distance){
-    Vector result = star_1->position - star_2->position;
-    result *= -1 * gravity_constant * star_1->mass * star_2->mass / (distance * distance);
+  Vector force_between(Star &star_1, Star &star_2, const float distance){
+    Vector result = star_1.position - star_2.position;
+    result *= (-1 * gravity_constant * star_1.mass * star_2.mass / distance);
     return result;
   }
 
@@ -134,4 +130,3 @@ class Galaxy{
     }
   }
 };
-
