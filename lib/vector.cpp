@@ -7,8 +7,8 @@ class Vector{
   float b;
 
   Vector(float _a, float _b){
-    a = _a;
-    b = _b;
+    this->a = _a;
+    this->b = _b;
   }
 
   Vector(){

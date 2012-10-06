@@ -5,14 +5,16 @@
 class GameWindow : public Gosu::Window
 {
   Galaxy* galaxy;
-  // int counter;
+  int counter;
+  int mili;
 
   public:
   
   GameWindow() : Window(1000, 1000, false)
   {
-    // counter = 0;
-    galaxy = new Galaxy(3000);
+    counter = 0;
+    mili = Gosu::milliseconds();
+    galaxy = new Galaxy(2000);
     setCaption(L"Gosu Tutorial Game"); 
   }
 
@@ -20,10 +22,11 @@ class GameWindow : public Gosu::Window
   {
     galaxy->calculate_forces();
     galaxy->move();
-    // counter++;
-    // if(counter == 20){
-    //   exit(1);
-    // }
+    counter++;
+    if(counter == 20){
+      std::cout << Gosu::milliseconds() - mili << "\n";
+      exit(1);
+    }
   }
 
   void draw()
@@ -38,5 +41,5 @@ class GameWindow : public Gosu::Window
 int main() 
 {
   GameWindow window;
-  window.show(); 
+  window.show();
 }

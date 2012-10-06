@@ -26,7 +26,7 @@ class Star{
   ~Star(){
   }
 
-  float distance_to(Star *star){
+  inline float distance_to(Star *star){
     return (this->position - star->position).normal_sum();
   }
 

@@ -23,7 +23,8 @@ class Galaxy{
     size = 1000;
     gravity_constant = 0.0001;
 
-    srand(time(NULL));
+    // srand(time(NULL));
+    srand(0);
 
     stars = new Star*[stars_count];
 
@@ -60,11 +61,7 @@ class Galaxy{
     #pragma omp parallel for num_threads(50)
     for(int i = 0; i < stars_count; ++i){
       force_matrix[i] = new Vector[stars_count];
-
-      #pragma omp parallel for num_threads(50)
-      for(int j = 0; j < stars_count; ++j){
-        force_matrix[i][j] = Vector(0, 0);
-      }
+      force_matrix[i][i] = Vector(0, 0);
     }
   }
 
@@ -72,7 +69,7 @@ class Galaxy{
     #pragma omp parallel for num_threads(50) //shared(a_x_matrix, a_y_matrix)
     for(int i = 0; i < stars_count; ++i){
       #pragma omp parallel for num_threads(50)
-      for(int j = i+1; j < stars_count; ++j){
+      for(int j = 0; j < i; ++j){
         update_forces_with_matrices(i, j);
       }
     }
@@ -83,8 +80,12 @@ class Galaxy{
     for(int i = 0; i < stars_count; ++i){
       Vector force = Vector(0.0, 0.0);
 
-      for(int j = 0; j < stars_count; ++j){
+      for(int j = 0; j < i; ++j){
         force += force_matrix[i][j];
+      }
+
+      for(int j = i+1; j < stars_count; j++){
+        force -= force_matrix[j][i];
       }
 
       stars[i]->update_acceleration(force);
@@ -107,28 +108,23 @@ class Galaxy{
     remove_matrices();
   }
 
-  void add_to_matrix(int i, int j, Vector v){
-    force_matrix[i][j] -= v;
-    force_matrix[j][i] += v;
-  }
-
   void update_forces_with_matrices(int i, int j){
-    if(i != j){
-      Star *star_1 = stars[i];
-      Star *star_2 = stars[j];
+    Star *star_1 = stars[i];
+    Star *star_2 = stars[j];
 
-      float distance = star_1->distance_to(star_2);
+    float distance = star_1->distance_to(star_2);
 
-      if(distance > star_1->size + star_2->size){
-        Vector force = force_between(star_1, star_2, distance);
-        add_to_matrix(i, j, force);
-      }
+    if(distance > star_1->size + star_2->size){
+      force_matrix[i][j] = force_between(star_1, star_2, distance);
+    }
+    else{
+      force_matrix[i][j] = Vector(0, 0);
     }
   }
 
   Vector force_between(Star *star_1, Star *star_2, float distance){
     Vector result = star_1->position - star_2->position;
-    result *= gravity_constant * star_1->mass * star_2->mass / (distance * distance);
+    result *= -1 * gravity_constant * star_1->mass * star_2->mass / (distance * distance);
     return result;
   }
 
